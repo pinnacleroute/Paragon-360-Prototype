@@ -1068,6 +1068,10 @@ function VentureMarquee() {
 // ─── App Root ─────────────────────────────────────────────────────────────────
 
 export default function App() {
+  useEffect(() => {
+    document.title = "Paragon 360 | Building a Better Tomorrow™";
+  }, []);
+
   return (
     <div
       className="min-h-screen bg-[#05090f] text-[#dde4ed] overflow-x-hidden"
