@@ -1013,7 +1013,7 @@ function Footer() {
                 Private inquiries only.
               </p>
               <p className="text-xs text-[#7a8fa8]" style={{ fontFamily: "'Raleway', sans-serif" }}>
-                contact@paragon360.com
+                info@paragon360.com
               </p>
               <p className="text-xs text-[#7a8fa8]" style={{ fontFamily: "'Raleway', sans-serif" }}>
                 Global Platform
