@@ -76,11 +76,15 @@ function Header() {
       }`}
     >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 h-16 sm:h-20 flex items-center justify-between">
-        <button onClick={() => scrollTo("#hero")} className="flex-shrink-0">
+        <button
+          onClick={() => scrollTo("#hero")}
+          className="group flex h-[52px] w-[150px] flex-shrink-0 items-center justify-start sm:h-[64px] sm:w-[184px] lg:h-[70px] lg:w-[202px]"
+          aria-label="Paragon 360 home"
+        >
           <ImageWithFallback
             src={logoTransparent}
             alt="Paragon 360 — Building a Better Tomorrow"
-            className="h-9 sm:h-12 w-auto object-contain"
+            className="h-full w-full origin-left object-contain object-left drop-shadow-[0_10px_28px_rgba(200,168,75,0.18)] transition-transform duration-300 group-hover:scale-[1.03]"
           />
         </button>
 
@@ -146,14 +150,18 @@ function Header() {
 
 function Hero() {
   return (
-    <section id="hero" className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
+    <section id="hero" className="hero-section relative flex items-center justify-center overflow-hidden">
       {/* Video background */}
       <video
+        aria-hidden="true"
         autoPlay
+        disablePictureInPicture
         muted
         loop
         playsInline
-        className="absolute inset-0 w-full h-full object-cover"
+        preload="auto"
+        className="hero-video absolute inset-0"
+        controlsList="nodownload noplaybackrate noremoteplayback"
         style={{ filter: "brightness(0.45) saturate(0.7)" }}
       >
         <source src={heroVideo} type="video/mp4" />
@@ -694,7 +702,10 @@ function InquiryForm() {
   const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    const nextValue = name === "phone" ? value.replace(/\D/g, "") : value;
+
+    setForm((prev) => ({ ...prev, [name]: nextValue }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -830,12 +841,15 @@ function InquiryForm() {
                     <input
                       id="inquiry-phone"
                       name="phone"
-                      maxLength={30}
+                      type="tel"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      maxLength={15}
                       value={form.phone}
                       onChange={handleChange}
                       className="w-full bg-[#05090f] border border-[#c8a84b]/20 text-[#dde4ed] px-4 py-3 text-sm focus:border-[#c8a84b]/50 focus:outline-none transition-colors"
                       style={{ fontFamily: "'Raleway', sans-serif" }}
-                      placeholder="+1 000 000 0000"
+                      placeholder="0000000000"
                     />
                   </div>
                   <div>
@@ -903,8 +917,8 @@ function InquiryForm() {
                     value={form.message}
                     onChange={handleChange}
                     rows={4}
-                    className="w-full bg-[#05090f] border border-[#c8a84b]/20 text-[#dde4ed] px-4 py-3 text-sm focus:border-[#c8a84b]/50 focus:outline-none transition-colors resize-none"
-                    style={{ fontFamily: "'Raleway', sans-serif" }}
+                    className="w-full bg-[#05090f] border border-[#c8a84b]/20 text-[#b8c4d2] placeholder:text-[#7a8fa8]/70 px-4 py-3 text-sm font-normal leading-6 tracking-normal focus:border-[#c8a84b]/50 focus:outline-none transition-colors resize-none"
+                    style={{ fontFamily: "'Raleway', sans-serif", fontWeight: 400 }}
                     placeholder="Describe your interest or inquiry..."
                   />
                 </div>
@@ -937,11 +951,21 @@ function Footer() {
       <div className="max-w-[1440px] mx-auto">
         <div className="grid md:grid-cols-3 gap-12 mb-12">
           <div>
-            <ImageWithFallback
-              src={logoTransparent}
-              alt="Paragon 360"
-              className="h-12 w-auto object-contain mb-4"
-            />
+            <div className="mb-5 flex h-[78px] w-[224px] items-center justify-start sm:h-[88px] sm:w-[252px]">
+              <video
+                aria-hidden="true"
+                autoPlay
+                disablePictureInPicture
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                className="h-full w-full origin-left object-cover object-center drop-shadow-[0_14px_36px_rgba(200,168,75,0.16)]"
+                controlsList="nodownload noplaybackrate noremoteplayback"
+              >
+                <source src={heroVideo} type="video/mp4" />
+              </video>
+            </div>
             <p
               className="text-[10px] tracking-[0.16em] sm:tracking-[0.35em] uppercase text-[#c8a84b]/50 font-medium"
               style={{ fontFamily: "'DM Mono', monospace" }}
