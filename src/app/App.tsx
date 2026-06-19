@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, type FormEvent } from "react";
 import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
-import { Menu, X, ChevronDown, ArrowRight, Globe, Building2, Star, Layers, Mic2, Hotel } from "lucide-react";
+import { Menu, X, ChevronDown, ArrowRight, Globe, Building2, Star, Layers, Mic2, Hotel, LockKeyhole } from "lucide-react";
 
 import logoTransparent from "@/imports/logo-transparent.png";
 import visual2 from "@/imports/visual2.png";
@@ -1091,10 +1091,106 @@ function VentureMarquee() {
 
 // ─── App Root ─────────────────────────────────────────────────────────────────
 
+const SITE_PASSWORD = import.meta.env.VITE_SITE_PASSWORD || "Preston's_Paragon360";
+const AUTH_STORAGE_KEY = "paragon-360-authenticated";
+
+function PasswordGate({ onAuthenticated }: { onAuthenticated: () => void }) {
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const submitPassword = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (password === SITE_PASSWORD) {
+      sessionStorage.setItem(AUTH_STORAGE_KEY, "true");
+      onAuthenticated();
+      return;
+    }
+
+    setError("Incorrect password. Please try again.");
+    setPassword("");
+  };
+
+  return (
+    <main
+      className="min-h-screen bg-[#05090f] text-[#dde4ed] flex items-center justify-center px-4 sm:px-6 overflow-hidden relative"
+      style={{ fontFamily: "'Raleway', sans-serif" }}
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(61,111,168,0.24),transparent_48%),radial-gradient(ellipse_at_bottom,rgba(200,168,75,0.18),transparent_44%)]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#05090f]/40 via-[#05090f]/86 to-[#05090f]" />
+      <div className="fixed inset-0 pointer-events-none border border-[#3d6fa8]/25 shadow-[inset_0_0_12px_rgba(61,111,168,0.12)] z-[9999]" />
+
+      <section className="relative z-10 w-full max-w-[440px] border border-[#c8a84b]/20 bg-[#080e1a]/88 backdrop-blur-md px-6 py-8 sm:px-8 sm:py-10 shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
+        <div className="mb-8 flex flex-col items-center text-center">
+          <ImageWithFallback
+            src={logoTransparent}
+            alt="Paragon 360"
+            className="mb-6 h-20 w-56 object-contain drop-shadow-[0_10px_28px_rgba(200,168,75,0.18)]"
+          />
+          <div className="mb-5 flex h-11 w-11 items-center justify-center border border-[#c8a84b]/35 text-[#c8a84b]">
+            <LockKeyhole size={20} aria-hidden="true" />
+          </div>
+          <p
+            className="text-[10px] tracking-[0.28em] uppercase text-[#c8a84b]"
+            style={{ fontFamily: "'DM Mono', monospace" }}
+          >
+            Private Access
+          </p>
+          <h1
+            className="mt-3 text-2xl sm:text-3xl font-semibold text-white leading-tight"
+            style={{ fontFamily: "'Cinzel', serif" }}
+          >
+            Enter Password
+          </h1>
+        </div>
+
+        <form onSubmit={submitPassword} className="space-y-4">
+          <label htmlFor="site-password" className="sr-only">
+            Password
+          </label>
+          <input
+            id="site-password"
+            type="password"
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value);
+              setError("");
+            }}
+            autoComplete="current-password"
+            autoFocus
+            className="w-full border border-[#c8a84b]/25 bg-[#05090f]/80 px-4 py-3 text-base text-white outline-none transition-colors placeholder:text-[#3a4d62] focus:border-[#c8a84b]/70"
+            placeholder="Password"
+          />
+          {error && (
+            <p className="text-sm text-[#e5a5a5]" role="alert">
+              {error}
+            </p>
+          )}
+          <button
+            type="submit"
+            className="w-full border border-[#c8a84b]/55 bg-[#c8a84b] px-5 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-[#05090f] transition-all duration-200 hover:bg-[#d9bd67] focus:outline-none focus:ring-2 focus:ring-[#c8a84b]/60 focus:ring-offset-2 focus:ring-offset-[#080e1a]"
+            style={{ fontFamily: "'DM Mono', monospace" }}
+          >
+            Unlock
+          </button>
+        </form>
+      </section>
+    </main>
+  );
+}
+
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    () => sessionStorage.getItem(AUTH_STORAGE_KEY) === "true"
+  );
+
   useEffect(() => {
     document.title = "Paragon 360 | Building a Better Tomorrow™";
   }, []);
+
+  if (!isAuthenticated) {
+    return <PasswordGate onAuthenticated={() => setIsAuthenticated(true)} />;
+  }
 
   return (
     <div
