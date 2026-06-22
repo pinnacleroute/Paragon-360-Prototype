@@ -1091,7 +1091,7 @@ function VentureMarquee() {
 
 // ─── App Root ─────────────────────────────────────────────────────────────────
 
-const SITE_PASSWORD = import.meta.env.VITE_SITE_PASSWORD || "Preston's_Paragon360";
+const SITE_PASSWORD = import.meta.env.VITE_SITE_PASSWORD || "paragon360";
 const AUTH_STORAGE_KEY = "paragon-360-authenticated";
 
 function PasswordGate({ onAuthenticated }: { onAuthenticated: () => void }) {
