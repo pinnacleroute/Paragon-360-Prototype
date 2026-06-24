@@ -50,13 +50,14 @@ body {
   }
 
   .hero-video {
-    left: 50%;
-    right: auto;
-    width: max(100%, calc(100svh * 16 / 9));
+    left: 0;
+    right: 0;
+    width: 100%;
     height: 100%;
     max-width: none;
+    object-fit: contain;
     object-position: center center;
-    transform: translateX(-50%) translateZ(0);
+    transform: translateZ(0);
   }
 
   @supports (height: 100dvh) {
@@ -66,7 +67,7 @@ body {
     }
 
     .hero-video {
-      width: max(100%, calc(100dvh * 16 / 9));
+      width: 100%;
     }
   }
 }

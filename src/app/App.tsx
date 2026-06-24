@@ -10,6 +10,7 @@ import visual5 from "@/imports/visual5.png";
 import visual6 from "@/imports/visual6.png";
 import visual7 from "@/imports/visual7.png";
 import heroVideo from "@/imports/hero-vision.mp4";
+import heroVideoWithAudio from "@/imports/hero-vision-with-audio.mp4";
 
 // ─── Utility ─────────────────────────────────────────────────────────────────
 
@@ -149,30 +150,95 @@ function Header() {
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 
 function Hero() {
+  const heroRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const isHeroVisibleRef = useRef(false);
+  const playAttemptRef = useRef(0);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    const video = videoRef.current;
+    if (!hero || !video) return;
+
+    const pauseHeroVideo = () => {
+      playAttemptRef.current += 1;
+      video.pause();
+    };
+
+    const playHeroVideo = async ({ restart = false, allowMutedFallback = true } = {}) => {
+      const attempt = playAttemptRef.current + 1;
+      playAttemptRef.current = attempt;
+
+      if (restart) {
+        video.currentTime = 0;
+      }
+
+      video.volume = 0.85;
+      video.muted = false;
+
+      try {
+        await video.play();
+      } catch {
+        if (!allowMutedFallback || playAttemptRef.current !== attempt) return;
+
+        video.muted = true;
+        try {
+          await video.play();
+        } catch {
+          pauseHeroVideo();
+        }
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const isVisible = entry.isIntersecting && entry.intersectionRatio >= 0.55;
+
+        if (isVisible && !isHeroVisibleRef.current) {
+          isHeroVisibleRef.current = true;
+          void playHeroVideo({ restart: true });
+          return;
+        }
+
+        if (!isVisible && isHeroVisibleRef.current) {
+          isHeroVisibleRef.current = false;
+          pauseHeroVideo();
+        }
+      },
+      { threshold: [0, 0.25, 0.55, 0.75, 1] },
+    );
+
+    const retryWithSound = () => {
+      if (!isHeroVisibleRef.current || (!video.muted && !video.paused)) return;
+      void playHeroVideo({ restart: video.ended, allowMutedFallback: false });
+    };
+
+    observer.observe(hero);
+    window.addEventListener("pointerdown", retryWithSound, { passive: true });
+    window.addEventListener("keydown", retryWithSound);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("pointerdown", retryWithSound);
+      window.removeEventListener("keydown", retryWithSound);
+      pauseHeroVideo();
+    };
+  }, []);
+
   return (
-    <section id="hero" className="hero-section relative flex items-center justify-center overflow-hidden">
+    <section ref={heroRef} id="hero" className="hero-section relative flex items-center justify-center overflow-hidden">
       {/* Video background */}
       <video
+        ref={videoRef}
         aria-hidden="true"
-        autoPlay
         disablePictureInPicture
-        muted
-        loop
         playsInline
         preload="auto"
         className="hero-video absolute inset-0"
         controlsList="nodownload noplaybackrate noremoteplayback"
-        style={{ filter: "brightness(0.45) saturate(0.7)" }}
       >
-        <source src={heroVideo} type="video/mp4" />
+        <source src={heroVideoWithAudio} type="video/mp4" />
       </video>
-
-      {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#05090f]/70 via-transparent to-[#05090f]/90" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#05090f]/50 via-transparent to-[#05090f]/20" />
-
-      {/* Subtle vignette */}
-      <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at center, transparent 30%, rgba(5,9,15,0.7) 100%)" }} />
 
       {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce opacity-50">
