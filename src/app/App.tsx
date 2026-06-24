@@ -1119,36 +1119,28 @@ function VentureMarquee() {
 
   // Repeat items to fill screen width
   const doubledItems = [...items, ...items, ...items, ...items];
+  const renderItems = (keyPrefix = "") =>
+    doubledItems.map((item, idx) => (
+      <div key={`${keyPrefix}${idx}`} className="flex shrink-0 items-center">
+        <span
+          className="text-xs sm:text-sm tracking-[0.25em] sm:tracking-[0.4em] uppercase text-[#c8a84b] font-medium"
+          style={{ fontFamily: "'Cinzel', serif" }}
+        >
+          {item}
+        </span>
+        <span className="mx-10 sm:mx-16 text-[#7a8fa8]/30 text-xs">◆</span>
+      </div>
+    ));
 
   return (
     <div className="bg-[#080e1a] border-y border-[#c8a84b]/12 overflow-hidden py-4 sm:py-5 relative z-10">
       <div className="flex overflow-hidden select-none">
-        <div className="flex items-center gap-12 sm:gap-20 min-w-full shrink-0 animate-marquee whitespace-nowrap">
-          {doubledItems.map((item, idx) => (
-            <div key={idx} className="flex items-center gap-12 sm:gap-20">
-              <span
-                className="text-xs sm:text-sm tracking-[0.25em] sm:tracking-[0.4em] uppercase text-[#c8a84b] font-medium"
-                style={{ fontFamily: "'Cinzel', serif" }}
-              >
-                {item}
-              </span>
-              <span className="text-[#7a8fa8]/30 text-xs">◆</span>
-            </div>
-          ))}
+        <div className="flex items-center min-w-full shrink-0 animate-marquee whitespace-nowrap">
+          {renderItems()}
         </div>
         {/* Secondary set for seamless loop */}
-        <div className="flex items-center gap-12 sm:gap-20 min-w-full shrink-0 animate-marquee whitespace-nowrap" aria-hidden="true">
-          {doubledItems.map((item, idx) => (
-            <div key={`dup-${idx}`} className="flex items-center gap-12 sm:gap-20">
-              <span
-                className="text-xs sm:text-sm tracking-[0.25em] sm:tracking-[0.4em] uppercase text-[#c8a84b] font-medium"
-                style={{ fontFamily: "'Cinzel', serif" }}
-              >
-                {item}
-              </span>
-              <span className="text-[#7a8fa8]/30 text-xs">◆</span>
-            </div>
-          ))}
+        <div className="flex items-center min-w-full shrink-0 animate-marquee whitespace-nowrap" aria-hidden="true">
+          {renderItems("dup-")}
         </div>
       </div>
     </div>
