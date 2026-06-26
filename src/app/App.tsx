@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, type FormEvent } from "react";
 import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
-import { Menu, X, ChevronDown, ArrowRight, Globe, Building2, Star, Layers, Mic2, Hotel, LockKeyhole } from "lucide-react";
+import { Menu, X, ChevronDown, ArrowRight, Globe, Building2, Star, Layers, Mic2, Hotel, LockKeyhole, Music2 } from "lucide-react";
 
 import logoTransparent from "@/imports/logo-transparent.png";
 import visual2 from "@/imports/visual2.png";
@@ -477,6 +477,7 @@ function EcosystemSection() {
     { icon: Globe, label: "Media & Broadcast" },
     { icon: Hotel, label: "Hospitality & Lifestyle" },
     { icon: Layers, label: "Future Developments" },
+    { icon: Music2, label: "Beatmondo" },
   ];
 
   return (
@@ -525,14 +526,16 @@ function EcosystemSection() {
               {ventures.map(({ icon: Icon, label }, i) => (
                 <div
                   key={label}
-                  className="flex items-center gap-3 sm:gap-4 p-4 border border-[#c8a84b]/12 bg-[#0b1628]/50 hover-3d-card group"
+                  className={`flex items-center gap-3 sm:gap-4 p-4 border border-[#c8a84b]/12 bg-[#0b1628]/50 hover-3d-card group ${
+                    i === ventures.length - 1 ? "sm:col-span-2 sm:justify-center" : ""
+                  }`}
                 >
                   <div className="w-8 h-8 flex items-center justify-center flex-shrink-0">
                     <Icon size={16} className="text-[#c8a84b]/70 group-hover:text-[#c8a84b] transition-colors" />
                   </div>
-                  <div>
+                  <div className="flex items-baseline gap-3">
                     <p
-                      className="text-[#c8a84b]/50 text-[10px] tracking-[0.16em] sm:tracking-[0.25em] uppercase mb-0.5"
+                      className="text-[#c8a84b]/50 text-[10px] tracking-[0.16em] sm:tracking-[0.25em] uppercase"
                       style={{ fontFamily: "'DM Mono', monospace" }}
                     >
                       0{i + 1}
