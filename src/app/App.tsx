@@ -483,8 +483,8 @@ function EcosystemSection() {
   return (
     <section id="ecosystem" className="scroll-mt-16 sm:scroll-mt-20 py-16 sm:py-24 lg:py-36 bg-[#080e1a] px-4 sm:px-6">
       <div className="max-w-[1440px] mx-auto">
-        <div className="grid lg:grid-cols-[minmax(0,1.18fr)_minmax(0,0.9fr)] gap-10 sm:gap-16 lg:gap-14 xl:gap-20 items-center">
-          <div className="order-2 lg:order-1 relative lg:-ml-8 xl:-ml-16 group overflow-hidden">
+        <div className="grid lg:grid-cols-[minmax(0,1.18fr)_minmax(0,0.9fr)] gap-10 sm:gap-16 lg:gap-14 xl:gap-20 items-center lg:items-stretch">
+          <div className="order-2 lg:order-1 relative lg:-ml-8 xl:-ml-16 group overflow-hidden lg:min-h-full">
             {/* Subtle hover glow back panel */}
             <div className="absolute inset-0 bg-gradient-to-tr from-[#c8a84b]/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             
@@ -505,7 +505,7 @@ function EcosystemSection() {
               preload="metadata"
               poster={visual7}
               aria-label="Paragon 360 ecosystem — interconnected venture categories"
-              className="w-full aspect-video object-cover mix-blend-screen opacity-95"
+              className="w-full aspect-video lg:h-full lg:aspect-auto object-cover mix-blend-screen opacity-95"
               style={{
                 WebkitMaskImage:
                   "radial-gradient(ellipse at center, black 58%, rgba(0,0,0,0.86) 76%, transparent 100%)",
@@ -518,7 +518,7 @@ function EcosystemSection() {
             </video>
           </div>
 
-          <div className="order-1 lg:order-2">
+          <div className="order-1 lg:order-2 flex flex-col justify-center">
             <SectionLabel>The Ventures</SectionLabel>
             <SectionHeading className="mb-6 sm:mb-10">The Paragon 360 Ecosystem</SectionHeading>
 
